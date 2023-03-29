@@ -43,31 +43,33 @@ class PostController extends Controller
         
         $like = Like::where('post_id', $request->post_id)->where('user_id', auth()->id())->first();
 
-        if($like && $like->post_id == $request->post_id && $request->like) {
-            return response()->json([
-                'data' => null,
-                'status' => 500,
-                'message' => 'You already liked this post'
+        if($request->like) {
+            if($like && $like->post_id == $request->post_id) {
+                return response()->json([
+                    'data' => null,
+                    'status' => 500,
+                    'message' => 'You already liked this post'
+                ]);
+            }
+
+            Like::create([
+                'post_id' => $request->post_id,
+                'user_id' => auth()->id()
             ]);
-        }elseif($like && $like->post_id == $request->post_id && !$request->like) {
-            $like->delete();
             
             return response()->json([
                 'data' => null,
                 'status' => 200,
-                'message' => 'You unlike this post successfully'
+                'message' => 'You like this post successfully'
             ]);
+        }elseif($like && $like->post_id == $request->post_id) {
+            $like->delete();
         }
-        
-        Like::create([
-            'post_id' => $request->post_id,
-            'user_id' => auth()->id()
-        ]);
-        
+
         return response()->json([
             'data' => null,
             'status' => 200,
-            'message' => 'You like this post successfully'
+            'message' => 'You unlike this post successfully'
         ]);
     }
 }
