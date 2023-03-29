@@ -15,7 +15,9 @@ class InternetServiceProviderController extends Controller
         $amount = $mpt->calculateTotalAmount();
         
         return response()->json([
-            'data' => $amount
+            'data' => $amount,
+            'status' => 200,
+            'message'=> 'Success'
         ]);
     }
     
@@ -26,7 +28,9 @@ class InternetServiceProviderController extends Controller
         $amount = $ooredoo->calculateTotalAmount();
         
         return response()->json([
-            'data' => $amount
+            'data' => $amount,
+            'status' => 200,
+            'message'=> 'Success'
         ]);
     }
 }

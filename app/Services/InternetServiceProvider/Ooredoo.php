@@ -1,22 +1,20 @@
 <?php
 
 namespace App\Services\InternetServiceProvider;
+use App\Services\InternetServiceProvider\InternetServiceProviderService;
 
-class Ooredoo extends Mpt
+class Ooredoo extends InternetServiceProviderService
 {
-    protected $operator = 'ooredoo';
+    protected $operator;
     
-    protected $month = 0;
+    protected $month;
     
-    protected $monthlyFees = 150;
+    protected $monthlyFees;
     
-    public function setMonth(int $month)
+    public function __construct()
     {
-        $this->month = $month;
-    }
-    
-    public function calculateTotalAmount()
-    {
-        return $this->month * $this->monthlyFees;
+        $this->operator = 'ooredoo';
+        $this->month = 0;
+        $this->monthlyFees = 150;
     }
 }

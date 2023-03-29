@@ -1,22 +1,19 @@
 <?php
 
 namespace App\Services\InternetServiceProvider;
-
-class Mpt
+use App\Services\InternetServiceProvider\InternetServiceProviderService;
+class Mpt extends InternetServiceProviderService
 {
-    protected $operator = 'mpt';
+    protected $operator;
     
-    protected $month = 0;
+    protected $month;
     
-    protected $monthlyFees = 200;
-    
-    public function setMonth(int $month)
+    protected $monthlyFees;
+
+    public function __construct()
     {
-        $this->month = $month;
-    }
-    
-    public function calculateTotalAmount()
-    {
-        return $this->month * $this->monthlyFees;
+        $this->operator = 'mpt';
+        $this->month = 0;
+        $this->monthlyFees = 200;
     }
 }

@@ -5,39 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\Like;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Http\Resources\PostResource;
+use App\Http\Requests\PostReactionRequest;
 
 class PostController extends Controller
 {
     public function list()
     {
-        $posts = Post::get();
-        
-        $data = collect();
-        foreach ($posts as $post) {
-            $data->add([
-                'id'          => $post->id,
-                'title'       => $post->title,
-                'description' => $post->description,
-                'tags'        => $post->tags,
-                'like_counts' => $post->likes->count(),
-                'created_at'  => $post->created_at,
-            ]);
-        }
+        $posts = Post::orderBy('id','desc')->get();
+
         return response()->json([
-            'data' => $data,
+            'data' => PostResource::collection($posts),
+            'status' => 200,
+            'message'=> 'Success'
         ]);
     }
     
-    public function toggleReaction(Request $request)
+    public function toggleReaction(PostReactionRequest $request)
     {
-        $request->validate([
-            'post_id' => 'required|int|exists:posts,id',
-            'like'   => 'required|boolean'
-        ]);
-        
         $post = Post::find($request->post_id);
+        
         if(!$post) {
             return response()->json([
+                'data' => null,
                 'status' => 404,
                 'message' => 'model not found'
             ]);
@@ -45,14 +35,17 @@ class PostController extends Controller
         
         if($post->user_id == auth()->id()) {
             return response()->json([
+                'data' => null,
                 'status' => 500,
                 'message' => 'You cannot like your post'
             ]);
         }
         
         $like = Like::where('post_id', $request->post_id)->where('user_id', auth()->id())->first();
+
         if($like && $like->post_id == $request->post_id && $request->like) {
             return response()->json([
+                'data' => null,
                 'status' => 500,
                 'message' => 'You already liked this post'
             ]);
@@ -60,6 +53,7 @@ class PostController extends Controller
             $like->delete();
             
             return response()->json([
+                'data' => null,
                 'status' => 200,
                 'message' => 'You unlike this post successfully'
             ]);
@@ -71,6 +65,7 @@ class PostController extends Controller
         ]);
         
         return response()->json([
+            'data' => null,
             'status' => 200,
             'message' => 'You like this post successfully'
         ]);

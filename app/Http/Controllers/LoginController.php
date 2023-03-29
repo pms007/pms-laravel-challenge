@@ -29,7 +29,7 @@ class LoginController extends Controller
         }
         
         return response()->json([
-            'result' => new LoginResource($user),
+            'data' => new LoginResource($user),
             'status' => 200,
             'message'=> 'Success'
         ]);

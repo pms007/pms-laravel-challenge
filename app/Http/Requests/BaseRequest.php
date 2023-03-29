@@ -35,7 +35,7 @@ class BaseRequest extends FormRequest
     {
         $errors = $validator->errors();
         throw new HttpResponseException(response()->json([
-            'result' => null,
+            'data' => null,
             'status' => 400,
             'message' => $errors->first(),
         ],400));
